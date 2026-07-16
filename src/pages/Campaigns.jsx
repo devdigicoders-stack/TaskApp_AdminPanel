@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
-import { FiPlay, FiMonitor, FiEye, FiCamera, FiHeart, FiTwitter, FiThumbsUp, FiSend, FiGlobe, FiBook, FiFileText, FiSmartphone, FiTarget, FiEdit2, FiUsers, FiUser, FiLink, FiCheck, FiDollarSign, FiSearch, FiTrash2, FiPlus } from 'react-icons/fi';
+import { FiPlay, FiMonitor, FiEye, FiCamera, FiHeart, FiTwitter, FiThumbsUp, FiSend, FiGlobe, FiBook, FiFileText, FiSmartphone, FiTarget, FiEdit2, FiUsers, FiUser, FiLink, FiCheck, FiCheckSquare, FiDollarSign, FiSearch, FiTrash2, FiPlus } from 'react-icons/fi';
 
 // ─── Constants ────────────────────────────────────────────────
 const TASK_TYPES = [
