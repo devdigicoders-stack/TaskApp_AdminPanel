@@ -4,6 +4,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
 } from 'recharts';
+import { FiCheckSquare, FiFolder, FiTarget, FiDollarSign, FiBarChart2 } from 'react-icons/fi';
 
 const STATUS_COLORS = {
   todo: '#64748b',
@@ -71,7 +72,7 @@ export default function Dashboard() {
     <div>
       <div className="page-header">
         <div>
-          <h1 className="page-title">Dashboard 🚀</h1>
+          <h1 className="page-title">Dashboard</h1>
           <p className="page-subtitle">Welcome back! Here's what's happening today.</p>
         </div>
       </div>
@@ -79,28 +80,28 @@ export default function Dashboard() {
       {/* Stats Cards */}
       <div className="stats-grid">
         <div className="stat-card purple">
-          <div className="stat-icon purple">📋</div>
+          <div className="stat-icon purple"><FiCheckSquare /></div>
           <div className="stat-info">
             <div className="value" style={{ color: 'var(--accent-purple)' }}>{stats.tasks?.total ?? 0}</div>
             <div className="label">Total Tasks</div>
           </div>
         </div>
         <div className="stat-card blue">
-          <div className="stat-icon blue">🗂️</div>
+          <div className="stat-icon blue"><FiFolder /></div>
           <div className="stat-info">
             <div className="value" style={{ color: 'var(--accent-blue)' }}>{stats.projects?.total ?? 0}</div>
             <div className="label">Total Projects</div>
           </div>
         </div>
         <div className="stat-card green">
-          <div className="stat-icon green">🎯</div>
+          <div className="stat-icon green"><FiTarget /></div>
           <div className="stat-info">
             <div className="value" style={{ color: 'var(--accent-green)' }}>{stats.campaigns?.total ?? 0}</div>
             <div className="label">Total Campaigns</div>
           </div>
         </div>
         <div className="stat-card orange">
-          <div className="stat-icon orange">🪙</div>
+          <div className="stat-icon orange"><FiDollarSign /></div>
           <div className="stat-info">
             <div className="value" style={{ color: 'var(--accent-orange)' }}>{stats.campaigns?.totalCoinsDistributed ?? 0}</div>
             <div className="label">Coins Distributed</div>
@@ -114,7 +115,7 @@ export default function Dashboard() {
           <h3 className="chart-title">Tasks by Status</h3>
           {taskStatusData.length === 0 ? (
             <div className="empty-state" style={{ padding: '30px' }}>
-              <div className="icon">📊</div>
+              <div className="icon" style={{ fontSize: '2rem' }}><FiBarChart2 /></div>
               <p>No task data yet</p>
             </div>
           ) : (
@@ -136,7 +137,7 @@ export default function Dashboard() {
           <h3 className="chart-title">Tasks by Priority</h3>
           {taskPriorityData.length === 0 ? (
             <div className="empty-state" style={{ padding: '30px' }}>
-              <div className="icon">📊</div>
+              <div className="icon" style={{ fontSize: '2rem' }}><FiBarChart2 /></div>
               <p>No task data yet</p>
             </div>
           ) : (
@@ -161,7 +162,7 @@ export default function Dashboard() {
         <h3 className="chart-title">Projects by Status</h3>
         {projectStatusData.length === 0 ? (
           <div className="empty-state" style={{ padding: '30px' }}>
-            <div className="icon">🗂️</div>
+            <div className="icon" style={{ fontSize: '2rem' }}><FiFolder /></div>
             <p>No projects yet. Create your first project!</p>
           </div>
         ) : (

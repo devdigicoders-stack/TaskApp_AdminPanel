@@ -33,8 +33,10 @@ export default function Login() {
 
       <div className="login-card">
         <div className="login-logo">
-          <div className="icon">✅</div>
-          <h2>Task Management</h2>
+          <div className="icon" style={{ background: 'transparent', padding: 0 }}>
+            <img src="/logo.png" alt="TaskApp Logo" style={{ width: 64, height: 64, objectFit: 'contain' }} />
+          </div>
+          <h2>TaskApp</h2>
           <p>Sign in to your admin panel</p>
         </div>
 
@@ -78,15 +80,10 @@ export default function Login() {
                 Signing in...
               </>
             ) : (
-              <>🔐 Sign In</>
+              <>Sign In</>
             )}
           </button>
         </form>
-
-        <div style={{ textAlign: 'center', marginTop: 24, padding: '16px', background: 'rgba(139,92,246,0.05)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(139,92,246,0.1)' }}>
-          <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: 6 }}>Demo Credentials</p>
-          <p style={{ fontSize: '0.8rem', color: 'var(--accent-purple)', fontWeight: 600 }}>admin@demo.com / password123</p>
-        </div>
       </div>
     </div>
   );
