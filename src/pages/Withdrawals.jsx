@@ -195,9 +195,10 @@ export default function Withdrawals() {
           <p>No withdrawal requests matching the current filter</p>
         </div></div>
       ) : (
-        <div className="card" style={{ overflow: 'hidden' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
+        <div className="card" style={{ padding: 0 }}>
+          <div style={{ overflowX: 'auto', width: '100%' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
                 {['User', 'Amount', 'UPI ID', 'Status', 'Requested', 'Action'].map(h => (
                   <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontSize: '0.78rem', color: 'var(--text-secondary)', fontWeight: 600 }}>{h}</th>
@@ -246,8 +247,9 @@ export default function Withdrawals() {
                   </tr>
                 );
               })}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

@@ -586,7 +586,7 @@ tbody td { padding: 14px 16px; font-size: 0.875rem; color: var(--text-primary); 
 }
 
 @media (max-width: 768px) {
-  .main-content { margin-left: 0; padding: 16px; max-width: 100%; width: 100%; overflow-x: hidden; padding-top: 64px; }
+  .main-content { margin-left: 0; padding: 80px 16px 24px; max-width: 100%; width: 100%; overflow-x: hidden; }
   .sidebar { transform: translateX(-100%); }
   .sidebar.open { transform: translateX(0); box-shadow: 4px 0 24px rgba(0,0,0,0.5); }
   .stats-grid { grid-template-columns: 1fr 1fr; }
