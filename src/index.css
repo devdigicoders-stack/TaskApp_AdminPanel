@@ -578,7 +578,7 @@ tbody td { padding: 14px 16px; font-size: 0.875rem; color: var(--text-primary); 
 }
 
 @media (max-width: 768px) {
-  .main-content { margin-left: 0; padding: 16px; }
+  .main-content { margin-left: 0; padding: 16px; max-width: 100%; width: 100%; overflow-x: hidden; }
   .sidebar { transform: translateX(-100%); }
   .stats-grid { grid-template-columns: 1fr 1fr; }
 }
