@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import {
   PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer
@@ -15,6 +16,7 @@ const STATUS_COLORS = {
 export default function Dashboard() {
   const [stats, setStats] = useState({ campaigns: null, users: null, submissions: null });
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchStats();
@@ -59,21 +61,21 @@ export default function Dashboard() {
 
       {/* Stats Cards */}
       <div className="stats-grid">
-        <div className="stat-card purple">
+        <div className="stat-card purple" onClick={() => navigate('/campaigns')} style={{ cursor: 'pointer' }}>
           <div className="stat-icon purple"><FiCheckSquare /></div>
           <div className="stat-info">
             <div className="value" style={{ color: 'var(--accent-purple)' }}>{stats.campaigns?.total ?? 0}</div>
             <div className="label">Total Tasks</div>
           </div>
         </div>
-        <div className="stat-card blue">
+        <div className="stat-card blue" onClick={() => navigate('/users')} style={{ cursor: 'pointer' }}>
           <div className="stat-icon blue"><FiUsers /></div>
           <div className="stat-info">
             <div className="value" style={{ color: 'var(--accent-blue)' }}>{stats.users?.total ?? 0}</div>
             <div className="label">Total Users</div>
           </div>
         </div>
-        <div className="stat-card orange">
+        <div className="stat-card orange" onClick={() => navigate('/submissions')} style={{ cursor: 'pointer' }}>
           <div className="stat-icon orange"><FiInbox /></div>
           <div className="stat-info">
             <div className="value" style={{ color: 'var(--accent-orange)' }}>{stats.submissions?.pending ?? 0}</div>
