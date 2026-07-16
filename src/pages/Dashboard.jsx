@@ -1,27 +1,19 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, Legend,
+  PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer
 } from 'recharts';
-import { FiCheckSquare, FiFolder, FiTarget, FiDollarSign, FiBarChart2 } from 'react-icons/fi';
+import { FiCheckSquare, FiUsers, FiDollarSign, FiBarChart2, FiInbox } from 'react-icons/fi';
 
 const STATUS_COLORS = {
-  todo: '#64748b',
-  'in-progress': '#3b82f6',
-  review: '#f59e0b',
-  done: '#10b981',
-};
-
-const PRIORITY_COLORS = {
-  low: '#10b981',
-  medium: '#f59e0b',
-  high: '#ef4444',
-  urgent: '#ec4899',
+  started: '#3b82f6',
+  submitted: '#f59e0b',
+  approved: '#10b981',
+  rejected: '#ef4444',
 };
 
 export default function Dashboard() {
-  const [stats, setStats] = useState({ tasks: null, projects: null, users: null, campaigns: null });
+  const [stats, setStats] = useState({ campaigns: null, users: null, submissions: null });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,17 +22,15 @@ export default function Dashboard() {
 
   const fetchStats = async () => {
     try {
-      const [taskRes, projRes, userRes, campRes] = await Promise.all([
-        api.get('/tasks/stats'),
-        api.get('/projects/stats'),
-        api.get('/users/stats'),
+      const [campRes, userRes, subRes] = await Promise.all([
         api.get('/campaigns/stats').catch(() => ({ data: null })),
+        api.get('/users/stats').catch(() => ({ data: null })),
+        api.get('/submissions/stats').catch(() => ({ data: null })),
       ]);
       setStats({
-        tasks: taskRes.data,
-        projects: projRes.data,
-        users: userRes.data,
         campaigns: campRes?.data || null,
+        users: userRes?.data || null,
+        submissions: subRes?.data || null,
       });
     } catch (err) {
       console.error(err);
@@ -51,22 +41,12 @@ export default function Dashboard() {
 
   if (loading) return <div className="loading-center"><div className="spinner" /></div>;
 
-  const taskStatusData = (stats.tasks?.byStatus || []).map((s) => ({
-    name: s._id,
-    value: s.count,
-    color: STATUS_COLORS[s._id] || '#8b5cf6',
-  }));
-
-  const taskPriorityData = (stats.tasks?.byPriority || []).map((p) => ({
-    name: p._id,
-    count: p.count,
-  }));
-
-  const projectStatusData = (stats.projects?.byStatus || []).map((s) => ({
-    name: s._id,
-    value: s.count,
-    color: '#8b5cf6',
-  }));
+  const subData = stats.submissions ? [
+    { name: 'Started', value: stats.submissions.started, color: STATUS_COLORS.started },
+    { name: 'Pending Approval', value: stats.submissions.pending, color: STATUS_COLORS.submitted },
+    { name: 'Approved', value: stats.submissions.approved, color: STATUS_COLORS.approved },
+    { name: 'Rejected', value: stats.submissions.rejected, color: STATUS_COLORS.rejected },
+  ].filter(d => d.value > 0) : [];
 
   return (
     <div>
@@ -82,28 +62,28 @@ export default function Dashboard() {
         <div className="stat-card purple">
           <div className="stat-icon purple"><FiCheckSquare /></div>
           <div className="stat-info">
-            <div className="value" style={{ color: 'var(--accent-purple)' }}>{stats.tasks?.total ?? 0}</div>
+            <div className="value" style={{ color: 'var(--accent-purple)' }}>{stats.campaigns?.total ?? 0}</div>
             <div className="label">Total Tasks</div>
           </div>
         </div>
         <div className="stat-card blue">
-          <div className="stat-icon blue"><FiFolder /></div>
+          <div className="stat-icon blue"><FiUsers /></div>
           <div className="stat-info">
-            <div className="value" style={{ color: 'var(--accent-blue)' }}>{stats.projects?.total ?? 0}</div>
-            <div className="label">Total Projects</div>
-          </div>
-        </div>
-        <div className="stat-card green">
-          <div className="stat-icon green"><FiTarget /></div>
-          <div className="stat-info">
-            <div className="value" style={{ color: 'var(--accent-green)' }}>{stats.campaigns?.total ?? 0}</div>
-            <div className="label">Total Campaigns</div>
+            <div className="value" style={{ color: 'var(--accent-blue)' }}>{stats.users?.total ?? 0}</div>
+            <div className="label">Total Users</div>
           </div>
         </div>
         <div className="stat-card orange">
-          <div className="stat-icon orange"><FiDollarSign /></div>
+          <div className="stat-icon orange"><FiInbox /></div>
           <div className="stat-info">
-            <div className="value" style={{ color: 'var(--accent-orange)' }}>{stats.campaigns?.totalCoinsDistributed ?? 0}</div>
+            <div className="value" style={{ color: 'var(--accent-orange)' }}>{stats.submissions?.pending ?? 0}</div>
+            <div className="label">Pending Approvals</div>
+          </div>
+        </div>
+        <div className="stat-card green">
+          <div className="stat-icon green"><FiDollarSign /></div>
+          <div className="stat-info">
+            <div className="value" style={{ color: 'var(--accent-green)' }}>{stats.campaigns?.totalCoinsDistributed ?? 0}</div>
             <div className="label">Coins Distributed</div>
           </div>
         </div>
@@ -112,17 +92,17 @@ export default function Dashboard() {
       {/* Charts */}
       <div className="grid-2">
         <div className="card">
-          <h3 className="chart-title">Tasks by Status</h3>
-          {taskStatusData.length === 0 ? (
+          <h3 className="chart-title">Submissions Status</h3>
+          {subData.length === 0 ? (
             <div className="empty-state" style={{ padding: '30px' }}>
               <div className="icon" style={{ fontSize: '2rem' }}><FiBarChart2 /></div>
-              <p>No task data yet</p>
+              <p>No submission data yet</p>
             </div>
           ) : (
-            <ResponsiveContainer width="100%" height={220}>
+            <ResponsiveContainer width="100%" height={260}>
               <PieChart>
-                <Pie data={taskStatusData} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
-                  {taskStatusData.map((entry, i) => (
+                <Pie data={subData} cx="50%" cy="50%" outerRadius={90} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
+                  {subData.map((entry, i) => (
                     <Cell key={i} fill={entry.color} />
                   ))}
                 </Pie>
@@ -132,56 +112,6 @@ export default function Dashboard() {
             </ResponsiveContainer>
           )}
         </div>
-
-        <div className="card">
-          <h3 className="chart-title">Tasks by Priority</h3>
-          {taskPriorityData.length === 0 ? (
-            <div className="empty-state" style={{ padding: '30px' }}>
-              <div className="icon" style={{ fontSize: '2rem' }}><FiBarChart2 /></div>
-              <p>No task data yet</p>
-            </div>
-          ) : (
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={taskPriorityData} barSize={36}>
-                <XAxis dataKey="name" tick={{ fill: '#94a3b8', fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: '#94a3b8', fontSize: 12 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: '#16161e', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8, color: '#f1f5f9', fontSize: 12 }} />
-                <Bar dataKey="count" radius={[6, 6, 0, 0]}>
-                  {taskPriorityData.map((entry, i) => (
-                    <Cell key={i} fill={PRIORITY_COLORS[entry.name] || '#8b5cf6'} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          )}
-        </div>
-      </div>
-
-      {/* Project Status */}
-      <div className="card" style={{ marginTop: 20 }}>
-        <h3 className="chart-title">Projects by Status</h3>
-        {projectStatusData.length === 0 ? (
-          <div className="empty-state" style={{ padding: '30px' }}>
-            <div className="icon" style={{ fontSize: '2rem' }}><FiFolder /></div>
-            <p>No projects yet. Create your first project!</p>
-          </div>
-        ) : (
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={projectStatusData} barSize={50}>
-              <XAxis dataKey="name" tick={{ fill: '#94a3b8', fontSize: 12 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#94a3b8', fontSize: 12 }} axisLine={false} tickLine={false} allowDecimals={false} />
-              <Tooltip contentStyle={{ background: '#16161e', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8, color: '#f1f5f9', fontSize: 12 }} />
-              <Bar dataKey="value" fill="url(#gradient)" radius={[6, 6, 0, 0]}>
-                <defs>
-                  <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#8b5cf6" />
-                    <stop offset="100%" stopColor="#3b82f6" />
-                  </linearGradient>
-                </defs>
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        )}
       </div>
     </div>
   );

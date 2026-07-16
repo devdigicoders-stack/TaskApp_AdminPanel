@@ -86,13 +86,13 @@ function CampaignModal({ campaign, onClose, onSave }) {
         expiresAt: form.expiresAt || null,
       };
 
-      if (campaign?._id) {
-        await api.put(`/campaigns/${campaign._id}`, payload);
-        toast.success('Campaign updated!');
-      } else {
-        await api.post('/campaigns', payload);
-        toast.success('Campaign created!');
-      }
+        if (campaign?._id) {
+          await api.put(`/campaigns/${campaign._id}`, payload);
+          toast.success('Task updated!');
+        } else {
+          await api.post('/campaigns', payload);
+          toast.success('Task created!');
+        }
       onSave();
     } catch (err) {
       toast.error(err.response?.data?.message || 'Error saving campaign');
@@ -109,7 +109,7 @@ function CampaignModal({ campaign, onClose, onSave }) {
             <span style={{ marginRight: 8, verticalAlign: 'middle' }}>
               {campaign?._id ? <FiEdit2 /> : <FiTarget />}
             </span>
-            {campaign?._id ? 'Edit Campaign' : 'New Campaign Task'}
+            {campaign?._id ? 'Edit Task' : 'New Task'}
           </h2>
           <button className="btn btn-icon btn-ghost" onClick={onClose} id="campaign-modal-close">✕</button>
         </div>
@@ -264,7 +264,7 @@ function CampaignModal({ campaign, onClose, onSave }) {
           <div className="modal-footer">
             <button type="button" className="btn btn-ghost" onClick={onClose}>Cancel</button>
             <button id="campaign-save" type="submit" className="btn btn-primary" disabled={saving}>
-              {saving ? 'Saving...' : campaign?._id ? 'Update Campaign' : 'Create Campaign'}
+              {saving ? 'Saving...' : campaign?._id ? 'Update Task' : 'Create Task'}
             </button>
           </div>
         </form>
@@ -445,7 +445,7 @@ function StatsStrip({ stats }) {
         <div className="stat-icon purple"><FiTarget /></div>
         <div className="stat-info">
           <div className="value" style={{ color: 'var(--accent-purple)' }}>{stats.total ?? 0}</div>
-          <div className="label">Total Campaigns</div>
+          <div className="label">Total Tasks</div>
         </div>
       </div>
       <div className="stat-card green">
@@ -503,10 +503,10 @@ export default function Campaigns() {
   useEffect(() => { fetchAll(); }, [fetchAll]);
 
   const handleDelete = async (id) => {
-    if (!confirm('Delete this campaign? This will remove all completion records too.')) return;
+    if (!confirm('Delete this task? This will remove all completion records too.')) return;
     try {
       await api.delete(`/campaigns/${id}`);
-      toast.success('Campaign deleted');
+      toast.success('Task deleted');
       fetchAll();
     } catch {
       toast.error('Failed to delete campaign');
@@ -516,7 +516,7 @@ export default function Campaigns() {
   const handleToggleActive = async (campaign) => {
     try {
       await api.put(`/campaigns/${campaign._id}`, { isActive: !campaign.isActive });
-      toast.success(campaign.isActive ? 'Campaign deactivated' : 'Campaign activated ✅');
+      toast.success(campaign.isActive ? 'Task deactivated' : 'Task activated ✅');
       fetchAll();
     } catch {
       toast.error('Failed to update campaign');
@@ -541,12 +541,12 @@ export default function Campaigns() {
       <div className="page-header">
         <div>
           <h1 className="page-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            Campaigns <FiTarget />
+            Tasks <FiCheckSquare />
           </h1>
-          <p className="page-subtitle">Create & manage social media campaign tasks for users</p>
+          <p className="page-subtitle">Create & manage tasks for users</p>
         </div>
         <button id="create-campaign-btn" className="btn btn-primary" onClick={() => setModal('create')}>
-          <FiPlus style={{marginRight: 4}}/> New Campaign
+          <FiPlus style={{marginRight: 4}}/> New Task
         </button>
       </div>
 
@@ -561,7 +561,7 @@ export default function Campaigns() {
           </svg>
           <input
             id="campaign-search"
-            placeholder="Search campaigns..."
+            placeholder="Search tasks..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -597,8 +597,8 @@ export default function Campaigns() {
         <div className="card" style={{ marginTop: 20 }}>
           <div className="empty-state">
             <div className="icon" style={{ fontSize: '2rem' }}><FiTarget /></div>
-            <h3>No campaigns found</h3>
-            <p>Create your first campaign task to get started</p>
+            <h3>No tasks found</h3>
+            <p>Create your first task to get started</p>
           </div>
         </div>
       ) : (

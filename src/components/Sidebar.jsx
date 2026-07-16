@@ -5,9 +5,7 @@ import { FiPieChart, FiCheckSquare, FiFolder, FiTarget, FiInbox, FiDollarSign, F
 
 const NAV_ITEMS = [
   { to: '/', icon: <FiPieChart />, label: 'Dashboard', id: 'nav-dashboard' },
-  { to: '/tasks', icon: <FiCheckSquare />, label: 'Tasks', id: 'nav-tasks' },
-  { to: '/projects', icon: <FiFolder />, label: 'Projects', id: 'nav-projects' },
-  { to: '/campaigns', icon: <FiTarget />, label: 'Campaigns', id: 'nav-campaigns' },
+  { to: '/campaigns', icon: <FiCheckSquare />, label: 'Tasks', id: 'nav-campaigns' },
   { to: '/submissions', icon: <FiInbox />, label: 'Task Approvals', id: 'nav-submissions', badge: 'pending' },
   { to: '/withdrawals', icon: <FiDollarSign />, label: 'Withdrawals', id: 'nav-withdrawals' },
   { to: '/users', icon: <FiUsers />, label: 'Users', id: 'nav-users' },

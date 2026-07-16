@@ -4,9 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Sidebar from './components/Sidebar';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import Tasks from './pages/Tasks';
 import Campaigns from './pages/Campaigns';
-import Projects from './pages/Projects';
 import Users from './pages/Users';
 import Submissions from './pages/Submissions';
 import Withdrawals from './pages/Withdrawals';
@@ -32,9 +30,7 @@ function ProtectedLayout() {
       <main className="main-content">
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/tasks" element={<Tasks />} />
           <Route path="/campaigns" element={<Campaigns />} />
-          <Route path="/projects" element={<Projects />} />
           <Route path="/users" element={<Users />} />
           <Route path="/submissions" element={<Submissions />} />
           <Route path="/withdrawals" element={<Withdrawals />} />
