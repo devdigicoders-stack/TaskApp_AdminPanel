@@ -93,6 +93,14 @@ body {
   flex-direction: column;
   z-index: 100;
   overflow-y: auto;
+  transition: transform 0.3s ease;
+}
+
+.mobile-header {
+  display: none;
+}
+.mobile-overlay {
+  display: none;
 }
 
 .sidebar-logo {
@@ -578,9 +586,38 @@ tbody td { padding: 14px 16px; font-size: 0.875rem; color: var(--text-primary); 
 }
 
 @media (max-width: 768px) {
-  .main-content { margin-left: 0; padding: 16px; max-width: 100%; width: 100%; overflow-x: hidden; }
+  .main-content { margin-left: 0; padding: 16px; max-width: 100%; width: 100%; overflow-x: hidden; padding-top: 64px; }
   .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); box-shadow: 4px 0 24px rgba(0,0,0,0.5); }
   .stats-grid { grid-template-columns: 1fr 1fr; }
+
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 56px;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border);
+    z-index: 90;
+    padding: 0 16px;
+  }
+  .hamburger-btn {
+    background: none; border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .mobile-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(2px);
+    z-index: 95;
+  }
 }
 
 /* ===== Campaign Task Styles ===== */

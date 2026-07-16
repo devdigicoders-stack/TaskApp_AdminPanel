@@ -1,6 +1,8 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { FiMenu } from 'react-icons/fi';
 import Sidebar from './components/Sidebar';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -13,6 +15,7 @@ import './index.css';
 
 function ProtectedLayout() {
   const { user, loading } = useAuth();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   if (loading) {
     return (
@@ -26,8 +29,20 @@ function ProtectedLayout() {
 
   return (
     <div className="app-layout">
-      <Sidebar />
+      {isSidebarOpen && (
+        <div className="mobile-overlay" onClick={() => setIsSidebarOpen(false)} />
+      )}
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       <main className="main-content">
+        <div className="mobile-header">
+          <button className="hamburger-btn" onClick={() => setIsSidebarOpen(true)}>
+            <FiMenu />
+          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <img src="/logo.png" alt="Logo" style={{ width: 28, height: 28, objectFit: 'contain' }} />
+            <h2 style={{ fontSize: '1.1rem', margin: 0, fontWeight: 800 }}>TaskApp</h2>
+          </div>
+        </div>
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/campaigns" element={<Campaigns />} />

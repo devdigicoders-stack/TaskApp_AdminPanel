@@ -12,7 +12,7 @@ const NAV_ITEMS = [
   { to: '/settings', icon: <FiSettings />, label: 'Settings', id: 'nav-settings' },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, onClose }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-logo" style={{ padding: '24px 20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
         <img src="/logo.png" alt="TaskApp Logo" style={{ width: 40, height: 40, objectFit: 'contain' }} />
         <div>
@@ -40,6 +40,7 @@ export default function Sidebar() {
             id={item.id}
             to={item.to}
             end={item.to === '/'}
+            onClick={() => { if (onClose) onClose(); }}
             className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
           >
             <span style={{ fontSize: '1.2rem', display: 'flex', alignItems: 'center' }}>{item.icon}</span>
