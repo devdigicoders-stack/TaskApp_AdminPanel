@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
+import { FiFolder, FiFolderPlus, FiEdit2, FiTrash2 } from 'react-icons/fi';
 
 const STATUSES = ['planning', 'active', 'on-hold', 'completed'];
 const PRIORITIES = ['low', 'medium', 'high'];
@@ -49,7 +50,12 @@ function ProjectModal({ project, users, onClose, onSave }) {
     <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="modal">
         <div className="modal-header">
-          <h2 className="modal-title">{project?._id ? '✏️ Edit Project' : '➕ New Project'}</h2>
+          <h2 className="modal-title">
+            <span style={{ marginRight: 8, verticalAlign: 'middle' }}>
+              {project?._id ? <FiEdit2 /> : <FiFolderPlus />}
+            </span>
+            {project?._id ? 'Edit Project' : 'New Project'}
+          </h2>
           <button className="btn btn-icon btn-ghost" onClick={onClose} id="proj-modal-close">✕</button>
         </div>
         <form onSubmit={handleSubmit}>
@@ -160,11 +166,13 @@ export default function Projects() {
     <div>
       <div className="page-header">
         <div>
-          <h1 className="page-title">Projects 🗂️</h1>
+          <h1 className="page-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            Projects <FiFolder />
+          </h1>
           <p className="page-subtitle">Manage all your projects</p>
         </div>
         <button id="create-project-btn" className="btn btn-primary" onClick={() => setModal('create')}>
-          + New Project
+          <FiFolderPlus style={{ marginRight: '6px' }} /> New Project
         </button>
       </div>
 
@@ -184,7 +192,7 @@ export default function Projects() {
       ) : filtered.length === 0 ? (
         <div className="card">
           <div className="empty-state">
-            <div className="icon">🗂️</div>
+            <div className="icon" style={{ fontSize: '2rem' }}><FiFolder /></div>
             <h3>No projects found</h3>
             <p>Create your first project to get started</p>
           </div>
@@ -198,9 +206,9 @@ export default function Projects() {
                   <h3 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: 4 }} className="truncate">{proj.name}</h3>
                   <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>{proj.description || 'No description'}</p>
                 </div>
-                <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                  <button className="btn btn-sm btn-secondary" onClick={() => setModal(proj)}>✏️</button>
-                  <button className="btn btn-sm btn-danger" onClick={() => deleteProject(proj._id)}>🗑️</button>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button className="btn btn-sm btn-secondary" onClick={() => setModal(proj)}><FiEdit2 /></button>
+                  <button className="btn btn-sm btn-danger" onClick={() => deleteProject(proj._id)}><FiTrash2 /></button>
                 </div>
               </div>
 

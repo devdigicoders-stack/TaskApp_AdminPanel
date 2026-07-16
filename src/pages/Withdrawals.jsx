@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
+import { FiDollarSign, FiCheck, FiX, FiInbox, FiBarChart2 } from 'react-icons/fi';
 
 const STATUS_COLORS = {
-  pending:  { bg: 'rgba(245,158,11,0.12)',  text: 'var(--accent-orange)', label: '🟡 Pending' },
-  approved: { bg: 'rgba(16,185,129,0.12)',  text: 'var(--accent-green)',  label: '✅ Approved' },
-  rejected: { bg: 'rgba(239,68,68,0.12)',   text: 'var(--accent-red)',    label: '❌ Rejected' },
+  pending:  { bg: 'rgba(245,158,11,0.12)',  text: 'var(--accent-orange)', label: 'Pending' },
+  approved: { bg: 'rgba(16,185,129,0.12)',  text: 'var(--accent-green)',  label: 'Approved' },
+  rejected: { bg: 'rgba(239,68,68,0.12)',   text: 'var(--accent-red)',    label: 'Rejected' },
 };
 
 function QRModal({ user, onClose }) {
@@ -59,7 +60,7 @@ function ResolveModal({ withdrawal, onClose, onDone }) {
     setSaving(true);
     try {
       await api.put(`/withdrawals/${withdrawal._id}/resolve`, { status, adminNote: note });
-      toast.success(status === 'approved' ? '✅ Withdrawal approved & marked as paid!' : '❌ Withdrawal rejected, coins refunded.');
+      toast.success(status === 'approved' ? 'Withdrawal approved & marked as paid!' : 'Withdrawal rejected, coins refunded.');
       onDone();
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed');
@@ -72,7 +73,7 @@ function ResolveModal({ withdrawal, onClose, onDone }) {
     <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="modal" style={{ maxWidth: 440, width: '95vw' }}>
         <div className="modal-header">
-          <h2 className="modal-title">💸 Process Withdrawal</h2>
+          <h2 className="modal-title"><FiDollarSign style={{marginRight: 6}} /> Process Withdrawal</h2>
           <button className="btn btn-icon btn-ghost" onClick={onClose}>✕</button>
         </div>
         <form onSubmit={handle}>
@@ -82,7 +83,7 @@ function ResolveModal({ withdrawal, onClose, onDone }) {
               <div style={{ color: 'var(--text-secondary)', fontSize: '0.82rem' }}>UPI: {withdrawal.upiId}</div>
               <div style={{ marginTop: 8, display: 'flex', gap: 16 }}>
                 <div><span style={{ color: 'var(--text-secondary)', fontSize: '0.78rem' }}>Coins</span>
-                  <div style={{ fontWeight: 700, color: 'var(--accent-purple)' }}>🪙 {withdrawal.coinsAmount}</div>
+                  <div style={{ fontWeight: 700, color: 'var(--accent-purple)', display: 'flex', alignItems: 'center' }}><FiDollarSign style={{marginRight: 4}}/> {withdrawal.coinsAmount}</div>
                 </div>
                 <div><span style={{ color: 'var(--text-secondary)', fontSize: '0.78rem' }}>INR Amount</span>
                   <div style={{ fontWeight: 700, color: 'var(--accent-green)' }}>₹ {withdrawal.inrAmount?.toFixed(2)}</div>
@@ -94,12 +95,11 @@ function ResolveModal({ withdrawal, onClose, onDone }) {
               <div style={{ display: 'flex', gap: 10 }}>
                 <button type="button" onClick={() => setStatus('approved')}
                   className={`btn ${status === 'approved' ? 'btn-primary' : 'btn-ghost'}`} style={{ flex: 1 }}>
-                  ✅ Mark as Paid
+                  <FiCheck style={{marginRight: 6}}/> Mark as Paid
                 </button>
                 <button type="button" onClick={() => setStatus('rejected')}
                   className={`btn ${status === 'rejected' ? 'btn-danger' : 'btn-ghost'}`} style={{ flex: 1 }}>
-                  ❌ Reject
-                </button>
+                  <FiX style={{marginRight: 6}}/> Reject & Refund               </button>
               </div>
             </div>
             <div className="form-group">
@@ -151,7 +151,9 @@ export default function Withdrawals() {
     <div>
       <div className="page-header">
         <div>
-          <h1 className="page-title">Withdrawals 💸</h1>
+          <h1 className="page-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            Withdrawals <FiDollarSign />
+          </h1>
           <p className="page-subtitle">Manage user coin withdrawal requests</p>
         </div>
       </div>
@@ -159,10 +161,10 @@ export default function Withdrawals() {
       {stats && (
         <div className="stats-grid" style={{ marginBottom: 24 }}>
           {[
-            { label: 'Pending', value: stats.pending, icon: '🟡', color: 'var(--accent-orange)' },
-            { label: 'Approved', value: stats.approved, icon: '✅', color: 'var(--accent-green)' },
-            { label: 'Total INR Paid', value: `₹${(stats.totalInrPaid||0).toFixed(2)}`, icon: '💰', color: 'var(--accent-blue)' },
-            { label: 'Total Coins Paid', value: stats.totalCoinsPaid ?? 0, icon: '🪙', color: 'var(--accent-purple)' },
+            { label: 'Pending', value: stats.pending, icon: <FiInbox />, color: 'var(--accent-orange)' },
+            { label: 'Approved', value: stats.approved, icon: <FiCheck />, color: 'var(--accent-green)' },
+            { label: 'Rejected', value: stats.rejected, icon: <FiX />, color: 'var(--accent-red)' },
+            { label: 'Total Coins Paid', value: stats.totalCoinsPaid ?? 0, icon: <FiDollarSign />, color: 'var(--accent-purple)' },
           ].map((s) => (
             <div key={s.label} className="stat-card">
               <div className="stat-icon">{s.icon}</div>
@@ -188,7 +190,7 @@ export default function Withdrawals() {
         <div className="loading-center"><div className="spinner" /></div>
       ) : withdrawals.length === 0 ? (
         <div className="card"><div className="empty-state">
-          <div className="icon">💸</div>
+            <div className="icon" style={{ fontSize: '2rem' }}><FiDollarSign /></div>
           <h3>No withdrawals found</h3>
           <p>No withdrawal requests matching the current filter</p>
         </div></div>
@@ -214,7 +216,7 @@ export default function Withdrawals() {
                       <div style={{ fontSize: '0.74rem', color: 'var(--text-secondary)' }}>{w.user?.email}</div>
                     </td>
                     <td style={{ padding: '12px 16px' }}>
-                      <div style={{ fontWeight: 700, color: 'var(--accent-purple)' }}>🪙 {w.coinsAmount}</div>
+                      <div style={{ fontWeight: 700, color: 'var(--accent-purple)', display: 'flex', alignItems: 'center' }}><FiDollarSign style={{marginRight: 4}}/> {w.coinsAmount}</div>
                       <div style={{ fontSize: '0.8rem', color: 'var(--accent-green)' }}>₹ {w.inrAmount?.toFixed(2)}</div>
                     </td>
                     <td style={{ padding: '12px 16px' }}>

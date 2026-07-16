@@ -1,22 +1,23 @@
 import { useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
+import { FiPlay, FiMonitor, FiEye, FiCamera, FiHeart, FiTwitter, FiThumbsUp, FiSend, FiGlobe, FiBook, FiFileText, FiSmartphone, FiTarget, FiEdit2, FiUsers, FiUser, FiLink, FiCheck, FiDollarSign, FiSearch, FiTrash2, FiPlus } from 'react-icons/fi';
 
 // ─── Constants ────────────────────────────────────────────────
 const TASK_TYPES = [
-  { value: 'youtube_likes',        icon: '▶️',  label: 'YT Likes' },
-  { value: 'youtube_subscribers',  icon: '📺',  label: 'YT Subs' },
-  { value: 'youtube_views',        icon: '👁️',  label: 'YT Views' },
-  { value: 'instagram_followers',  icon: '📸',  label: 'IG Follow' },
-  { value: 'instagram_likes',      icon: '❤️',  label: 'IG Likes' },
-  { value: 'twitter_followers',    icon: '🐦',  label: 'X Follow' },
-  { value: 'twitter_likes',        icon: '💙',  label: 'X Likes' },
-  { value: 'telegram_join',        icon: '✈️',  label: 'Telegram' },
-  { value: 'website_visit',        icon: '🌐',  label: 'Website' },
-  { value: 'homework',             icon: '📚',  label: 'Homework' },
-  { value: 'survey',               icon: '📝',  label: 'Survey' },
-  { value: 'app_download',         icon: '📱',  label: 'App DL' },
-  { value: 'custom',               icon: '🎯',  label: 'Custom' },
+  { value: 'youtube_likes',        icon: <FiPlay />,  label: 'YT Likes' },
+  { value: 'youtube_subscribers',  icon: <FiMonitor />,  label: 'YT Subs' },
+  { value: 'youtube_views',        icon: <FiEye />,  label: 'YT Views' },
+  { value: 'instagram_followers',  icon: <FiCamera />,  label: 'IG Follow' },
+  { value: 'instagram_likes',      icon: <FiHeart />,  label: 'IG Likes' },
+  { value: 'twitter_followers',    icon: <FiTwitter />,  label: 'X Follow' },
+  { value: 'twitter_likes',        icon: <FiThumbsUp />,  label: 'X Likes' },
+  { value: 'telegram_join',        icon: <FiSend />,  label: 'Telegram' },
+  { value: 'website_visit',        icon: <FiGlobe />,  label: 'Website' },
+  { value: 'homework',             icon: <FiBook />,  label: 'Homework' },
+  { value: 'survey',               icon: <FiFileText />,  label: 'Survey' },
+  { value: 'app_download',         icon: <FiSmartphone />,  label: 'App DL' },
+  { value: 'custom',               icon: <FiTarget />,  label: 'Custom' },
 ];
 
 const EMPTY_FORM = {
@@ -33,7 +34,7 @@ const EMPTY_FORM = {
 
 // ─── Helpers ──────────────────────────────────────────────────
 function getTaskTypeInfo(value) {
-  return TASK_TYPES.find((t) => t.value === value) || { icon: '🎯', label: value };
+  return TASK_TYPES.find((t) => t.value === value) || { icon: <FiTarget />, label: value };
 }
 
 function formatNumber(n) {
@@ -90,7 +91,7 @@ function CampaignModal({ campaign, onClose, onSave }) {
         toast.success('Campaign updated!');
       } else {
         await api.post('/campaigns', payload);
-        toast.success('Campaign created! 🎯');
+        toast.success('Campaign created!');
       }
       onSave();
     } catch (err) {
@@ -105,7 +106,10 @@ function CampaignModal({ campaign, onClose, onSave }) {
       <div className="modal" style={{ maxWidth: 640, width: '95vw' }}>
         <div className="modal-header">
           <h2 className="modal-title">
-            {campaign?._id ? '✏️ Edit Campaign' : '🎯 New Campaign Task'}
+            <span style={{ marginRight: 8, verticalAlign: 'middle' }}>
+              {campaign?._id ? <FiEdit2 /> : <FiTarget />}
+            </span>
+            {campaign?._id ? 'Edit Campaign' : 'New Campaign Task'}
           </h2>
           <button className="btn btn-icon btn-ghost" onClick={onClose} id="campaign-modal-close">✕</button>
         </div>
@@ -182,7 +186,7 @@ function CampaignModal({ campaign, onClose, onSave }) {
                   onChange={(e) => set('targetUrl', e.target.value)}
                   placeholder="https://example.com/..."
                 />
-                <span className="url-icon">🔗</span>
+                <span className="url-icon"><FiLink /></span>
               </div>
             </div>
 
@@ -210,7 +214,7 @@ function CampaignModal({ campaign, onClose, onSave }) {
               <div className="form-group">
                 <label className="form-label">Coins Reward *</label>
                 <div className="coins-input-wrapper">
-                  <span className="coins-symbol">🪙</span>
+                  <span className="coins-symbol"><FiDollarSign /></span>
                   <input
                     id="campaign-coins"
                     className="form-input"
@@ -285,7 +289,7 @@ function CompletionsModal({ campaign, onClose }) {
     <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="modal" style={{ maxWidth: 500, width: '95vw' }}>
         <div className="modal-header">
-          <h2 className="modal-title">👥 Completions — {campaign.title}</h2>
+          <h2 className="modal-title"><FiUsers style={{marginRight: 8}}/> Completions — {campaign.title}</h2>
           <button className="btn btn-icon btn-ghost" onClick={onClose}>✕</button>
         </div>
         <div className="modal-body">
@@ -293,13 +297,13 @@ function CompletionsModal({ campaign, onClose }) {
             <div className="loading-center"><div className="spinner" /></div>
           ) : completions.length === 0 ? (
             <div className="empty-state" style={{ padding: '30px' }}>
-              <div className="icon">👤</div>
+              <div className="icon"><FiUser /></div>
               <p>No one has completed this task yet</p>
             </div>
           ) : (
             <>
               <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: 14 }}>
-                <span className="coin-badge">🪙 {campaign.coinsReward} coins</span> rewarded to each of <strong>{completions.length}</strong> user(s)
+                <span className="coin-badge"><FiDollarSign style={{marginRight: 2}}/> {campaign.coinsReward} coins</span> rewarded to each of <strong>{completions.length}</strong> user(s)
               </p>
               <div className="completions-list">
                 {completions.map((c, i) => (
@@ -351,7 +355,7 @@ function CampaignCard({ campaign, onEdit, onDelete, onViewCompletions, onToggleA
           </div>
           <div className="campaign-card-title">{campaign.title}</div>
         </div>
-        <span className="coin-badge">🪙 {campaign.coinsReward}</span>
+        <span className="coin-badge"><FiDollarSign style={{marginRight: 2}}/> {campaign.coinsReward}</span>
       </div>
 
       {/* Description */}
@@ -362,7 +366,7 @@ function CampaignCard({ campaign, onEdit, onDelete, onViewCompletions, onToggleA
       {/* Meta info */}
       <div className="campaign-meta">
         <span className="campaign-meta-item">
-          🎯 Target: <strong>{formatNumber(campaign.targetCount)}</strong>
+          <FiTarget style={{marginRight: 4}}/> Target: <strong>{formatNumber(campaign.targetCount)}</strong>
         </span>
         <button
           className="completion-pill"
@@ -371,7 +375,7 @@ function CampaignCard({ campaign, onEdit, onDelete, onViewCompletions, onToggleA
           id={`completions-${campaign._id}`}
           style={{ cursor: 'pointer', border: '1px solid var(--border)' }}
         >
-          ✅ {campaign.completionsCount} completed
+          <FiCheck style={{marginRight: 4}}/> {campaign.completionsCount} completed
         </button>
         {campaign.expiresAt && (
           <span className="campaign-meta-item">
@@ -396,7 +400,7 @@ function CampaignCard({ campaign, onEdit, onDelete, onViewCompletions, onToggleA
         }}
         title={campaign.targetUrl}
       >
-        🔗 {campaign.targetUrl}
+        <FiLink style={{marginRight: 4}}/> {campaign.targetUrl}
       </a>
 
       {/* Actions */}
@@ -417,7 +421,7 @@ function CampaignCard({ campaign, onEdit, onDelete, onViewCompletions, onToggleA
           id={`edit-campaign-${campaign._id}`}
           title="Edit"
         >
-          ✏️ Edit
+          <FiEdit2 style={{marginRight: 4}}/> Edit
         </button>
         <button
           className="btn btn-sm btn-danger"
@@ -425,7 +429,7 @@ function CampaignCard({ campaign, onEdit, onDelete, onViewCompletions, onToggleA
           id={`delete-campaign-${campaign._id}`}
           title="Delete"
         >
-          🗑️
+          <FiTrash2 />
         </button>
       </div>
     </div>
@@ -438,28 +442,28 @@ function StatsStrip({ stats }) {
   return (
     <div className="stats-grid" style={{ marginBottom: 24 }}>
       <div className="stat-card purple">
-        <div className="stat-icon purple">🎯</div>
+        <div className="stat-icon purple"><FiTarget /></div>
         <div className="stat-info">
           <div className="value" style={{ color: 'var(--accent-purple)' }}>{stats.total ?? 0}</div>
           <div className="label">Total Campaigns</div>
         </div>
       </div>
       <div className="stat-card green">
-        <div className="stat-icon green">✅</div>
+        <div className="stat-icon green"><FiCheck /></div>
         <div className="stat-info">
           <div className="value" style={{ color: 'var(--accent-green)' }}>{stats.active ?? 0}</div>
           <div className="label">Active</div>
         </div>
       </div>
       <div className="stat-card orange">
-        <div className="stat-icon orange">🏆</div>
+        <div className="stat-icon orange"><FiCheck /></div>
         <div className="stat-info">
           <div className="value" style={{ color: 'var(--accent-orange)' }}>{stats.totalCompletions ?? 0}</div>
           <div className="label">Total Completions</div>
         </div>
       </div>
       <div className="stat-card blue">
-        <div className="stat-icon blue">🪙</div>
+        <div className="stat-icon blue"><FiDollarSign /></div>
         <div className="stat-info">
           <div className="value" style={{ color: 'var(--accent-blue)' }}>{formatNumber(stats.totalCoinsDistributed ?? 0)}</div>
           <div className="label">Coins Distributed</div>
@@ -536,11 +540,13 @@ export default function Campaigns() {
       {/* Page Header */}
       <div className="page-header">
         <div>
-          <h1 className="page-title">Campaigns 🎯</h1>
+          <h1 className="page-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            Campaigns <FiTarget />
+          </h1>
           <p className="page-subtitle">Create & manage social media campaign tasks for users</p>
         </div>
         <button id="create-campaign-btn" className="btn btn-primary" onClick={() => setModal('create')}>
-          + New Campaign
+          <FiPlus style={{marginRight: 4}}/> New Campaign
         </button>
       </div>
 
@@ -551,7 +557,7 @@ export default function Campaigns() {
       <div className="filters-row">
         <div className="search-bar">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+            <FiSearch />
           </svg>
           <input
             id="campaign-search"
@@ -590,7 +596,7 @@ export default function Campaigns() {
       ) : filtered.length === 0 ? (
         <div className="card" style={{ marginTop: 20 }}>
           <div className="empty-state">
-            <div className="icon">🎯</div>
+            <div className="icon" style={{ fontSize: '2rem' }}><FiTarget /></div>
             <h3>No campaigns found</h3>
             <p>Create your first campaign task to get started</p>
           </div>

@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
+import { FiInbox, FiCheck, FiX, FiDollarSign, FiBarChart2 } from 'react-icons/fi';
 
 const STATUS_COLORS = {
-  started:   { bg: 'rgba(99,102,241,0.12)', text: 'var(--accent-purple)', label: '🔵 Started' },
-  submitted: { bg: 'rgba(245,158,11,0.12)',  text: 'var(--accent-orange)', label: '🟡 Pending Review' },
-  approved:  { bg: 'rgba(16,185,129,0.12)',  text: 'var(--accent-green)',  label: '✅ Approved' },
-  rejected:  { bg: 'rgba(239,68,68,0.12)',   text: 'var(--accent-red)',    label: '❌ Rejected' },
+  started:   { bg: 'rgba(99,102,241,0.12)', text: 'var(--accent-purple)', label: 'Started' },
+  submitted: { bg: 'rgba(245,158,11,0.12)',  text: 'var(--accent-orange)', label: 'Pending Review' },
+  approved:  { bg: 'rgba(16,185,129,0.12)',  text: 'var(--accent-green)',  label: 'Approved' },
+  rejected:  { bg: 'rgba(239,68,68,0.12)',   text: 'var(--accent-red)',    label: 'Rejected' },
 };
 
 function ResolveModal({ submission, onClose, onDone }) {
@@ -19,7 +20,7 @@ function ResolveModal({ submission, onClose, onDone }) {
     setSaving(true);
     try {
       await api.put(`/submissions/${submission._id}/resolve`, { status, adminNote: note });
-      toast.success(status === 'approved' ? `✅ Approved! Coins credited.` : '❌ Submission rejected.');
+      toast.success(status === 'approved' ? `Approved! Coins credited.` : 'Submission rejected.');
       onDone();
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to resolve');
@@ -42,7 +43,7 @@ function ResolveModal({ submission, onClose, onDone }) {
               <div style={{ color: 'var(--text-secondary)' }}>By: {submission.user?.name} ({submission.user?.email})</div>
               {submission.note && <div style={{ marginTop: 8, color: 'var(--text-secondary)', fontStyle: 'italic' }}>User note: "{submission.note}"</div>}
               <div style={{ marginTop: 8, fontWeight: 600, color: 'var(--accent-purple)' }}>
-                🪙 Reward: {submission.campaign?.coinsReward} coins
+                <FiDollarSign style={{marginRight: 4}}/> Reward: {submission.campaign?.coinsReward} coins
               </div>
             </div>
             <div className="form-group">
@@ -50,11 +51,11 @@ function ResolveModal({ submission, onClose, onDone }) {
               <div style={{ display: 'flex', gap: 10 }}>
                 <button type="button" onClick={() => setStatus('approved')}
                   className={`btn ${status === 'approved' ? 'btn-primary' : 'btn-ghost'}`} style={{ flex: 1 }}>
-                  ✅ Approve
+                  <FiCheck style={{marginRight: 6}}/> Approve
                 </button>
                 <button type="button" onClick={() => setStatus('rejected')}
                   className={`btn ${status === 'rejected' ? 'btn-danger' : 'btn-ghost'}`} style={{ flex: 1 }}>
-                  ❌ Reject
+                  <FiX style={{marginRight: 6}}/> Reject
                 </button>
               </div>
             </div>
@@ -108,7 +109,9 @@ export default function Submissions() {
     <div>
       <div className="page-header">
         <div>
-          <h1 className="page-title">Task Approvals 📥</h1>
+          <h1 className="page-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            Task Approvals <FiInbox />
+          </h1>
           <p className="page-subtitle">Review and approve user task submissions</p>
         </div>
       </div>
@@ -117,10 +120,10 @@ export default function Submissions() {
       {stats && (
         <div className="stats-grid" style={{ marginBottom: 24 }}>
           {[
-            { label: 'Pending', value: stats.pending, icon: '🟡', color: 'var(--accent-orange)' },
-            { label: 'Approved', value: stats.approved, icon: '✅', color: 'var(--accent-green)' },
-            { label: 'Rejected', value: stats.rejected, icon: '❌', color: 'var(--accent-red)' },
-            { label: 'Total', value: stats.total, icon: '📊', color: 'var(--accent-purple)' },
+            { label: 'Pending', value: stats.pending, icon: <FiInbox />, color: 'var(--accent-orange)' },
+            { label: 'Approved', value: stats.approved, icon: <FiCheck />, color: 'var(--accent-green)' },
+            { label: 'Rejected', value: stats.rejected, icon: <FiX />, color: 'var(--accent-red)' },
+            { label: 'Total', value: stats.total, icon: <FiBarChart2 />, color: 'var(--accent-purple)' },
           ].map((s) => (
             <div key={s.label} className="stat-card">
               <div className="stat-icon">{s.icon}</div>
@@ -138,7 +141,7 @@ export default function Submissions() {
         {['submitted', 'approved', 'rejected', 'started', ''].map((s) => (
           <button key={s} onClick={() => setFilterStatus(s)}
             className={`btn btn-sm ${filterStatus === s ? 'btn-primary' : 'btn-ghost'}`}>
-            {s === '' ? '🔢 All' : statusInfo(s).label}
+            {s === '' ? 'All' : statusInfo(s).label}
           </button>
         ))}
       </div>
@@ -147,7 +150,7 @@ export default function Submissions() {
         <div className="loading-center"><div className="spinner" /></div>
       ) : submissions.length === 0 ? (
         <div className="card"><div className="empty-state">
-          <div className="icon">📥</div>
+          <div className="icon" style={{ fontSize: '2rem' }}><FiInbox /></div>
           <h3>No submissions found</h3>
           <p>No task submissions matching the current filter</p>
         </div></div>
@@ -177,7 +180,7 @@ export default function Submissions() {
                       <div style={{ fontSize: '0.74rem', color: 'var(--text-secondary)' }}>{sub.campaign?.taskType}</div>
                     </td>
                     <td style={{ padding: '12px 16px' }}>
-                      <span className="coin-badge">🪙 {sub.coinsAwarded || sub.campaign?.coinsReward}</span>
+                      <span className="coin-badge"><FiDollarSign style={{marginRight: 2}}/> {sub.coinsAwarded || sub.campaign?.coinsReward}</span>
                     </td>
                     <td style={{ padding: '12px 16px' }}>
                       <span style={{ background: si.bg, color: si.text, borderRadius: 20, padding: '3px 10px', fontSize: '0.76rem', fontWeight: 600 }}>

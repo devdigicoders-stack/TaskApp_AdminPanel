@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
+import { FiSettings, FiDollarSign } from 'react-icons/fi';
 
 const DEFAULT_SETTINGS = [
   {
@@ -12,7 +13,7 @@ const DEFAULT_SETTINGS = [
   },
   {
     key: 'min_withdrawal_coins',
-    label: '🪙 Minimum Withdrawal (Coins)',
+    label: 'Minimum Withdrawal (Coins)',
     description: 'Minimum coins required for a user to place a withdrawal request',
     type: 'number',
     defaultValue: 100,
@@ -45,7 +46,7 @@ export default function Settings() {
         description: s.description,
       }));
       await api.put('/settings', { settings });
-      toast.success('⚙️ Settings saved!');
+      toast.success('Settings saved!');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to save settings');
     } finally {
@@ -63,7 +64,9 @@ export default function Settings() {
     <div>
       <div className="page-header">
         <div>
-          <h1 className="page-title">Settings ⚙️</h1>
+          <h1 className="page-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            Settings <FiSettings />
+          </h1>
           <p className="page-subtitle">Global configuration for the Task Reward system</p>
         </div>
       </div>
@@ -105,13 +108,13 @@ export default function Settings() {
             <div style={{ background: 'var(--bg-tertiary)', borderRadius: 10, padding: '14px 16px' }}>
               <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginBottom: 4 }}>Exchange Rate</div>
               <div style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--accent-purple)' }}>
-                🪙 {coinsPerInr} coins = ₹1
+                <FiDollarSign style={{ marginRight: 4 }}/> {coinsPerInr} coins = ₹1
               </div>
             </div>
             <div style={{ background: 'var(--bg-tertiary)', borderRadius: 10, padding: '14px 16px' }}>
               <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginBottom: 4 }}>Min Withdrawal</div>
               <div style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--accent-orange)' }}>
-                🪙 {minCoins} coins
+                <FiDollarSign style={{ marginRight: 4 }}/> {minCoins} coins
               </div>
               <div style={{ fontSize: '0.78rem', color: 'var(--accent-green)', marginTop: 4 }}>
                 = ₹{(minCoins / coinsPerInr).toFixed(2)} INR
@@ -121,7 +124,7 @@ export default function Settings() {
               <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginBottom: 6 }}>Examples</div>
               {[100, 500, 1000, 5000].map((coins) => (
                 <div key={coins} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', marginBottom: 4 }}>
-                  <span style={{ color: 'var(--text-secondary)' }}>🪙 {coins} coins</span>
+                  <span style={{ color: 'var(--text-secondary)' }}><FiDollarSign style={{ marginRight: 4 }}/> {coins} coins</span>
                   <span style={{ fontWeight: 600, color: 'var(--accent-green)' }}>₹{(coins / coinsPerInr).toFixed(2)}</span>
                 </div>
               ))}

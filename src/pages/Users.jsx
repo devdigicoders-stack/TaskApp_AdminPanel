@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
+import { FiUsers, FiEdit2, FiTrash2, FiUserPlus, FiUser, FiSearch } from 'react-icons/fi';
 
 const ROLES = ['admin', 'manager', 'user'];
 
@@ -40,7 +41,12 @@ function UserModal({ user, onClose, onSave }) {
     <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="modal">
         <div className="modal-header">
-          <h2 className="modal-title">{isEdit ? '✏️ Edit User' : '👤 New User'}</h2>
+          <h2 className="modal-title">
+            <span style={{ marginRight: 8, verticalAlign: 'middle' }}>
+              {isEdit ? <FiEdit2 /> : <FiUserPlus />}
+            </span>
+            {isEdit ? 'Edit User' : 'New User'}
+          </h2>
           <button className="btn btn-icon btn-ghost" onClick={onClose} id="user-modal-close">✕</button>
         </div>
         <form onSubmit={handleSubmit}>
@@ -136,17 +142,19 @@ export default function Users() {
     <div>
       <div className="page-header">
         <div>
-          <h1 className="page-title">Users 👥</h1>
+          <h1 className="page-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            Users <FiUsers />
+          </h1>
           <p className="page-subtitle">Manage team members and roles</p>
         </div>
-        <button id="create-user-btn" className="btn btn-primary" onClick={() => setModal('create')}>
-          + New User
+        <button className="btn btn-primary" onClick={() => setModal(true)}>
+          <FiUserPlus style={{ marginRight: '6px' }} /> New User
         </button>
       </div>
 
       <div className="filters-row">
         <div className="search-bar">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></svg>
+          <FiSearch />
           <input id="user-search" placeholder="Search users..." value={search} onChange={(e) => setSearch(e.target.value)} />
         </div>
         <select id="filter-role" className="filter-select" value={filterRole} onChange={(e) => setFilterRole(e.target.value)}>
@@ -160,7 +168,7 @@ export default function Users() {
       ) : filtered.length === 0 ? (
         <div className="card">
           <div className="empty-state">
-            <div className="icon">👥</div>
+            <div className="icon" style={{ fontSize: '2rem' }}><FiUsers /></div>
             <h3>No users found</h3>
             <p>Add your first team member</p>
           </div>
@@ -197,8 +205,8 @@ export default function Users() {
                   <td style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>{formatDate(user.createdAt)}</td>
                   <td>
                     <div style={{ display: 'flex', gap: 8 }}>
-                      <button className="btn btn-sm btn-secondary" onClick={() => setModal(user)}>✏️</button>
-                      <button className="btn btn-sm btn-danger" onClick={() => deleteUser(user._id)}>🗑️</button>
+                      <button className="btn btn-sm btn-secondary" onClick={() => setModal(user)}><FiEdit2 /></button>
+                      <button className="btn btn-sm btn-danger" onClick={() => deleteUser(user._id)}><FiTrash2 /></button>
                     </div>
                   </td>
                 </tr>

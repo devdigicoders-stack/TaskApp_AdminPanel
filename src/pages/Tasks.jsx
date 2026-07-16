@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
+import { FiCheckSquare, FiPlusSquare, FiEdit2, FiTrash2 } from 'react-icons/fi';
 
 const STATUSES = ['todo', 'in-progress', 'review', 'done'];
 const PRIORITIES = ['low', 'medium', 'high', 'urgent'];
@@ -44,7 +45,12 @@ function TaskModal({ task, projects, users, onClose, onSave }) {
     <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="modal">
         <div className="modal-header">
-          <h2 className="modal-title">{task?._id ? '✏️ Edit Task' : '➕ New Task'}</h2>
+          <h2 className="modal-title">
+            <span style={{ marginRight: 8, verticalAlign: 'middle' }}>
+              {task?._id ? <FiEdit2 /> : <FiPlusSquare />}
+            </span>
+            {task?._id ? 'Edit Task' : 'New Task'}
+          </h2>
           <button className="btn btn-icon btn-ghost" onClick={onClose} id="task-modal-close">✕</button>
         </div>
         <form onSubmit={handleSubmit}>
@@ -164,7 +170,9 @@ export default function Tasks() {
     <div>
       <div className="page-header">
         <div>
-          <h1 className="page-title">Tasks 📋</h1>
+          <h1 className="page-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            Tasks <FiCheckSquare />
+          </h1>
           <p className="page-subtitle">Manage and track all tasks</p>
         </div>
         <button id="create-task-btn" className="btn btn-primary" onClick={() => setModal('create')}>
@@ -192,7 +200,7 @@ export default function Tasks() {
       ) : filtered.length === 0 ? (
         <div className="card">
           <div className="empty-state">
-            <div className="icon">📋</div>
+            <div className="icon" style={{ fontSize: '2rem' }}><FiCheckSquare /></div>
             <h3>No tasks found</h3>
             <p>Create your first task to get started</p>
           </div>
@@ -240,8 +248,8 @@ export default function Tasks() {
                   <td style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>{formatDate(task.dueDate)}</td>
                   <td>
                     <div style={{ display: 'flex', gap: 8 }}>
-                      <button className="btn btn-sm btn-secondary" onClick={() => setModal(task)}>✏️</button>
-                      <button className="btn btn-sm btn-danger" onClick={() => deleteTask(task._id)}>🗑️</button>
+                      <button className="btn btn-sm btn-secondary" onClick={() => setModal(task)}><FiEdit2 /></button>
+                      <button className="btn btn-sm btn-danger" onClick={() => deleteTask(task._id)}><FiTrash2 /></button>
                     </div>
                   </td>
                 </tr>
