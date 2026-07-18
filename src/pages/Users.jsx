@@ -271,6 +271,7 @@ export default function Users() {
                 <th>Email</th>
                 <th>Role</th>
                 <th>Coins</th>
+                <th>FCM Token</th>
                 <th>Status</th>
                 <th>Joined</th>
                 <th>Actions</th>
@@ -288,6 +289,15 @@ export default function Users() {
                   <td style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>{user.email}</td>
                   <td><Badge value={user.role} /></td>
                   <td style={{ fontWeight: 'bold', color: 'var(--accent-primary)' }}>{user.coins || 0}</td>
+                  <td>
+                    {user.fcmToken ? (
+                      <span title={user.fcmToken} className="badge badge-active" style={{ maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis', display: 'inline-block', whiteSpace: 'nowrap' }}>
+                        {user.fcmToken.substring(0, 8)}...
+                      </span>
+                    ) : (
+                      <span className="badge badge-high">None</span>
+                    )}
+                  </td>
                   <td>
                     <span className={`badge ${user.isActive ? 'badge-active' : 'badge-high'}`}>
                       {user.isActive ? 'Active' : 'Inactive'}
