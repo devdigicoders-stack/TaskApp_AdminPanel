@@ -50,6 +50,21 @@ export default function Gifts() {
     }
   };
 
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error('Image size must be less than 2MB');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setForm({ ...form, image: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleEdit = (g) => {
     setForm({
       name: g.name,
@@ -153,8 +168,19 @@ export default function Gifts() {
                   <input type="number" min="1" className="form-input" required value={form.requiredCoins} onChange={(e) => setForm({ ...form, requiredCoins: e.target.value })} />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Image URL (Optional)</label>
-                  <input type="url" className="form-input" value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} placeholder="https://..." />
+                  <label className="form-label">Image (Upload or URL)</label>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <input type="text" className="form-input" value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} placeholder="https://... or upload" style={{ flex: 1 }} />
+                    <input type="file" id="gift-image" accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
+                    <label htmlFor="gift-image" className="btn btn-secondary" style={{ cursor: 'pointer', padding: '0 16px', display: 'flex', alignItems: 'center' }}>
+                      Upload
+                    </label>
+                  </div>
+                  {form.image && (
+                    <div style={{ marginTop: '8px' }}>
+                      <img src={form.image} alt="Preview" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8, border: '1px solid var(--border-color)' }} />
+                    </div>
+                  )}
                 </div>
                 <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <input type="checkbox" id="isActive" checked={form.isActive} onChange={(e) => setForm({ ...form, isActive: e.target.checked })} />
