@@ -1,13 +1,15 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
-import { FiPieChart, FiCheckSquare, FiFolder, FiTarget, FiInbox, FiDollarSign, FiUsers, FiSettings, FiLogOut } from 'react-icons/fi';
+import { FiPieChart, FiCheckSquare, FiFolder, FiTarget, FiInbox, FiDollarSign, FiUsers, FiSettings, FiLogOut, FiGift } from 'react-icons/fi';
 
 const NAV_ITEMS = [
   { to: '/', icon: <FiPieChart />, label: 'Dashboard', id: 'nav-dashboard' },
   { to: '/campaigns', icon: <FiCheckSquare />, label: 'Tasks', id: 'nav-campaigns' },
   { to: '/submissions', icon: <FiInbox />, label: 'Task Approvals', id: 'nav-submissions', badge: 'pending' },
   { to: '/withdrawals', icon: <FiDollarSign />, label: 'Withdrawals', id: 'nav-withdrawals' },
+  { to: '/gifts', icon: <FiGift />, label: 'Gifts', id: 'nav-gifts' },
+  { to: '/redemptions', icon: <FiGift />, label: 'Redemptions', id: 'nav-redemptions' },
   { to: '/users', icon: <FiUsers />, label: 'Users', id: 'nav-users' },
   { to: '/settings', icon: <FiSettings />, label: 'Settings', id: 'nav-settings' },
 ];

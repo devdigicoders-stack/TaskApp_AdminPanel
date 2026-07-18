@@ -160,11 +160,17 @@ function NotificationModal({ targetUser, onClose, onSave }) {
               <textarea className="form-input" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} required placeholder="Notification content..." rows={4} />
             </div>
             <div className="form-group">
-              <label className="form-label">Image (Optional)</label>
-              <input type="file" className="form-input" accept="image/*" onChange={handleImageChange} />
+              <label className="form-label">Image URL (Optional)</label>
+              <input 
+                type="url" 
+                className="form-input" 
+                placeholder="https://example.com/image.jpg"
+                value={form.image}
+                onChange={(e) => setForm({ ...form, image: e.target.value })} 
+              />
               {form.image && (
-                <div style={{ marginTop: 10 }}>
-                  <img src={form.image} alt="Preview" style={{ maxWidth: '100%', maxHeight: 150, borderRadius: 8 }} />
+                <div style={{ marginTop: '10px' }}>
+                  <img src={form.image} alt="Preview" style={{ maxWidth: '100%', maxHeight: 150, borderRadius: 8 }} onError={(e) => e.target.style.display='none'} />
                 </div>
               )}
             </div>
@@ -269,6 +275,7 @@ export default function Users() {
               <tr>
                 <th>User</th>
                 <th>Email</th>
+                <th>Mobile</th>
                 <th>Role</th>
                 <th>Coins</th>
                 <th>FCM Token</th>
@@ -287,6 +294,7 @@ export default function Users() {
                     </div>
                   </td>
                   <td style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>{user.email}</td>
+                  <td style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>{user.mobileNumber || 'N/A'}</td>
                   <td><Badge value={user.role} /></td>
                   <td style={{ fontWeight: 'bold', color: 'var(--accent-primary)' }}>{user.coins || 0}</td>
                   <td>

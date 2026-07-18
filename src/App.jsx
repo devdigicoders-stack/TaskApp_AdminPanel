@@ -11,6 +11,8 @@ import Users from './pages/Users';
 import Submissions from './pages/Submissions';
 import Withdrawals from './pages/Withdrawals';
 import Settings from './pages/Settings';
+import Gifts from './pages/Gifts';
+import Redemptions from './pages/Redemptions';
 import './index.css';
 
 function ProtectedLayout() {
@@ -49,6 +51,8 @@ function ProtectedLayout() {
           <Route path="/users" element={<Users />} />
           <Route path="/submissions" element={<Submissions />} />
           <Route path="/withdrawals" element={<Withdrawals />} />
+          <Route path="/gifts" element={<Gifts />} />
+          <Route path="/redemptions" element={<Redemptions />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
