@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import api from '../utils/api';
+import api from '../services/api';
 import toast from 'react-hot-toast';
 import { FiCheckCircle, FiXCircle } from 'react-icons/fi';
-import Badge from '../components/Badge';
+
+function Badge({ value }) {
+  return <span className={`badge badge-${value}`}>{value}</span>;
+}
 
 export default function Redemptions() {
   const [redemptions, setRedemptions] = useState([]);
