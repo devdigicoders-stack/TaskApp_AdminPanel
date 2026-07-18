@@ -132,11 +132,11 @@ export default function Gifts() {
       )}
 
       {modal && (
-        <div className="modal-backdrop">
-          <div className="modal-content" style={{ maxWidth: 500 }}>
+        <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && setModal(false)}>
+          <div className="modal" style={{ maxWidth: 500 }}>
             <div className="modal-header">
-              <h2>{editingId ? 'Edit Gift' : 'New Gift'}</h2>
-              <button className="icon-btn" onClick={() => setModal(false)}>×</button>
+              <h2 className="modal-title">{editingId ? 'Edit Gift' : 'New Gift'}</h2>
+              <button className="btn btn-icon btn-ghost" onClick={() => setModal(false)}>✕</button>
             </div>
             <form onSubmit={handleSubmit}>
               <div className="modal-body">
