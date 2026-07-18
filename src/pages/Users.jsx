@@ -105,8 +105,23 @@ function UserModal({ user, onClose, onSave }) {
 }
 
 function NotificationModal({ targetUser, onClose, onSave }) {
-  const [form, setForm] = useState({ title: '', message: '' });
+  const [form, setForm] = useState({ title: '', message: '', image: '' });
   const [saving, setSaving] = useState(false);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error('Image size should be less than 2MB');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setForm({ ...form, image: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -143,6 +158,15 @@ function NotificationModal({ targetUser, onClose, onSave }) {
             <div className="form-group">
               <label className="form-label">Message *</label>
               <textarea className="form-input" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} required placeholder="Notification content..." rows={4} />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Image (Optional)</label>
+              <input type="file" className="form-input" accept="image/*" onChange={handleImageChange} />
+              {form.image && (
+                <div style={{ marginTop: 10 }}>
+                  <img src={form.image} alt="Preview" style={{ maxWidth: '100%', maxHeight: 150, borderRadius: 8 }} />
+                </div>
+              )}
             </div>
           </div>
           <div className="modal-footer">
