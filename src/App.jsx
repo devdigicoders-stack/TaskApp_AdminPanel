@@ -14,6 +14,7 @@ import Settings from './pages/Settings';
 import Gifts from './pages/Gifts';
 import Redemptions from './pages/Redemptions';
 import Merchants from './pages/Merchants';
+import Banners from './pages/Banners';
 import './index.css';
 
 function ProtectedLayout() {
@@ -55,6 +56,7 @@ function ProtectedLayout() {
           <Route path="/gifts" element={<Gifts />} />
           <Route path="/redemptions" element={<Redemptions />} />
           <Route path="/merchants" element={<Merchants />} />
+          <Route path="/banners" element={<Banners />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

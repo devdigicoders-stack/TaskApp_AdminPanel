@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
-import { FiPieChart, FiCheckSquare, FiFolder, FiTarget, FiInbox, FiDollarSign, FiUsers, FiSettings, FiLogOut, FiGift, FiShoppingBag } from 'react-icons/fi';
+import { FiPieChart, FiCheckSquare, FiFolder, FiTarget, FiInbox, FiDollarSign, FiUsers, FiSettings, FiLogOut, FiGift, FiShoppingBag, FiImage } from 'react-icons/fi';
 
 const NAV_ITEMS = [
   { to: '/', icon: <FiPieChart />, label: 'Dashboard', id: 'nav-dashboard' },
@@ -11,8 +11,9 @@ const NAV_ITEMS = [
   { to: '/gifts', icon: <FiGift />, label: 'Gifts', id: 'nav-gifts' },
   { to: '/redemptions', icon: <FiGift />, label: 'Redemptions', id: 'nav-redemptions' },
   { to: '/users', icon: <FiUsers />, label: 'Users', id: 'nav-users' },
-  { to: '/merchants', icon: <FiShoppingBag />, label: 'Merchants', id: 'nav-merchants' },
-  { to: '/settings', icon: <FiSettings />, label: 'Settings', id: 'nav-settings' },
+  { to: '/merchants', icon: <FiShoppingBag />, label: 'Merchants',   id: 'nav-merchants'   },
+  { to: '/banners',   icon: <FiImage />,       label: 'Banners',     id: 'nav-banners'     },
+  { to: '/settings',  icon: <FiSettings />,    label: 'Settings',    id: 'nav-settings'    },
 ];
 
 export default function Sidebar({ isOpen, onClose }) {
