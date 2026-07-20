@@ -15,6 +15,7 @@ export default function Gifts() {
     requiredCoins: '',
     image: '',
     isActive: true,
+    maxRedemptionsPerUser: 0,
   });
 
   useEffect(() => {
@@ -72,6 +73,7 @@ export default function Gifts() {
       requiredCoins: g.requiredCoins,
       image: g.image,
       isActive: g.isActive,
+      maxRedemptionsPerUser: g.maxRedemptionsPerUser ?? 0,
     });
     setEditingId(g._id);
     setModal(true);
@@ -99,7 +101,7 @@ export default function Gifts() {
         </div>
         <button className="btn btn-primary" onClick={() => {
           setEditingId(null);
-          setForm({ name: '', description: '', requiredCoins: '', image: '', isActive: true });
+          setForm({ name: '', description: '', requiredCoins: '', image: '', isActive: true, maxRedemptionsPerUser: 0 });
           setModal(true);
         }}>
           <FiPlus /> New Gift
@@ -134,6 +136,9 @@ export default function Gifts() {
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <span style={{ fontWeight: 'bold', color: 'var(--accent-primary)' }}>{g.requiredCoins} Coins</span>
                     <span className={`badge badge-${g.isActive ? 'active' : 'pending'}`}>{g.isActive ? 'Active' : 'Inactive'}</span>
+                  </div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 4 }}>
+                    🔁 Max per user: {g.maxRedemptionsPerUser > 0 ? g.maxRedemptionsPerUser : 'Unlimited'}
                   </div>
                   <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
                     <button className="btn btn-secondary" style={{ padding: '6px 12px', fontSize: '0.875rem' }} onClick={() => handleEdit(g)}><FiEdit2 /> Edit</button>
@@ -181,6 +186,20 @@ export default function Gifts() {
                       <img src={form.image} alt="Preview" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8, border: '1px solid var(--border-color)' }} />
                     </div>
                   )}
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Max Redemptions Per User</label>
+                  <input
+                    type="number"
+                    min="0"
+                    className="form-input"
+                    value={form.maxRedemptionsPerUser}
+                    onChange={(e) => setForm({ ...form, maxRedemptionsPerUser: Number(e.target.value) })}
+                    placeholder="0 = Unlimited"
+                  />
+                  <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 4 }}>
+                    0 = Unlimited. Set to 1 to allow only 1 redemption per user.
+                  </p>
                 </div>
                 <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <input type="checkbox" id="isActive" checked={form.isActive} onChange={(e) => setForm({ ...form, isActive: e.target.checked })} />
