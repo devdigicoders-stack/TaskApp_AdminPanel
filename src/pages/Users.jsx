@@ -187,11 +187,79 @@ function NotificationModal({ targetUser, onClose, onSave }) {
   );
 }
 
+function AdjustCoinsModal({ targetUser, onClose, onSave }) {
+  const [form, setForm] = useState({ amount: '', note: '' });
+  const [saving, setSaving] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      await api.post(`/users/${targetUser._id}/adjust-coins`, {
+        amount: Number(form.amount),
+        note: form.note,
+      });
+      toast.success('Coins adjusted successfully!');
+      onSave();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Error adjusting coins');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
+      <div className="modal">
+        <div className="modal-header">
+          <h2 className="modal-title">
+            <span style={{ marginRight: 8, verticalAlign: 'middle' }}>💰</span>
+            Adjust Coins ({targetUser?.name})
+          </h2>
+          <button className="btn btn-icon btn-ghost" onClick={onClose}>✕</button>
+        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="modal-body">
+            <div className="form-group">
+              <label className="form-label">Amount (+ to add, - to deduct) *</label>
+              <input 
+                type="number" 
+                className="form-input" 
+                value={form.amount} 
+                onChange={(e) => setForm({ ...form, amount: e.target.value })} 
+                required 
+                placeholder="e.g. 50 or -20" 
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Note (Optional)</label>
+              <input 
+                type="text" 
+                className="form-input" 
+                value={form.note} 
+                onChange={(e) => setForm({ ...form, note: e.target.value })} 
+                placeholder="Reason for adjustment" 
+              />
+            </div>
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="btn btn-ghost" onClick={onClose}>Cancel</button>
+            <button type="submit" className="btn btn-primary" disabled={saving}>
+              {saving ? 'Saving...' : 'Adjust Coins'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 export default function Users() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(null);
   const [notifyModal, setNotifyModal] = useState(null);
+  const [coinsModal, setCoinsModal] = useState(null);
   const [search, setSearch] = useState('');
   const [filterRole, setFilterRole] = useState('');
 
@@ -314,9 +382,10 @@ export default function Users() {
                   <td style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>{formatDate(user.createdAt)}</td>
                   <td>
                     <div style={{ display: 'flex', gap: 8 }}>
-                      <button className="btn btn-sm btn-secondary" onClick={() => setModal(user)}><FiEdit2 /></button>
-                      <button className="btn btn-sm btn-primary" onClick={() => setNotifyModal(user)}><FiBell /></button>
-                      <button className="btn btn-sm btn-danger" onClick={() => deleteUser(user._id)}><FiTrash2 /></button>
+                      <button className="btn btn-sm btn-secondary" onClick={() => setModal(user)} title="Edit User"><FiEdit2 /></button>
+                      <button className="btn btn-sm btn-primary" onClick={() => setCoinsModal(user)} title="Adjust Coins">💰</button>
+                      <button className="btn btn-sm btn-primary" onClick={() => setNotifyModal(user)} title="Notify User"><FiBell /></button>
+                      <button className="btn btn-sm btn-danger" onClick={() => deleteUser(user._id)} title="Delete User"><FiTrash2 /></button>
                     </div>
                   </td>
                 </tr>
@@ -339,6 +408,14 @@ export default function Users() {
           targetUser={notifyModal === 'broadcast' ? null : notifyModal}
           onClose={() => setNotifyModal(null)}
           onSave={() => setNotifyModal(null)}
+        />
+      )}
+
+      {coinsModal && (
+        <AdjustCoinsModal
+          targetUser={coinsModal}
+          onClose={() => setCoinsModal(null)}
+          onSave={() => { setCoinsModal(null); fetchUsers(); }}
         />
       )}
     </div>
