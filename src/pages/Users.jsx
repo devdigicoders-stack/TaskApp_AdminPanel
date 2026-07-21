@@ -3,7 +3,7 @@ import api from '../services/api';
 import toast from 'react-hot-toast';
 import { FiUsers, FiEdit2, FiTrash2, FiUserPlus, FiUser, FiSearch, FiBell } from 'react-icons/fi';
 
-const ROLES = ['admin', 'manager', 'user'];
+const ROLES = ['admin', 'user'];
 
 function Badge({ value }) {
   return <span className={`badge badge-${value}`}>{value}</span>;
@@ -289,7 +289,10 @@ export default function Users() {
   };
 
   const filtered = users.filter((u) => {
-    const matchSearch = u.name.toLowerCase().includes(search.toLowerCase()) || u.email.toLowerCase().includes(search.toLowerCase());
+    const searchLower = search.toLowerCase();
+    const matchSearch = u.name.toLowerCase().includes(searchLower) || 
+                        u.email.toLowerCase().includes(searchLower) || 
+                        (u.mobileNumber || '').toLowerCase().includes(searchLower);
     const matchRole = filterRole ? u.role === filterRole : true;
     return matchSearch && matchRole;
   });

@@ -18,6 +18,21 @@ const DEFAULT_SETTINGS = [
     type: 'number',
     defaultValue: 100,
   },
+  {
+    key: 'whatsapp_number',
+    label: '📱 WhatsApp Number',
+    description: 'WhatsApp number for support without spaces. E.g., +919876543210',
+    type: 'text',
+    defaultValue: '',
+  },
+  {
+    key: 'show_withdraw_button',
+    label: '👁️ Show Withdraw Button',
+    description: 'Toggle to show or hide the withdraw button in the user app.',
+    type: 'select',
+    options: [{ label: 'Show', value: 'true' }, { label: 'Hide', value: 'false' }],
+    defaultValue: 'true',
+  },
 ];
 
 export default function Settings() {
@@ -42,7 +57,11 @@ export default function Settings() {
     try {
       const settings = DEFAULT_SETTINGS.map((s) => ({
         key: s.key,
-        value: Number(values[s.key] ?? s.defaultValue),
+        value: s.type === 'number' 
+          ? Number(values[s.key] ?? s.defaultValue) 
+          : (s.type === 'select' && (values[s.key] ?? s.defaultValue) === 'true' || (values[s.key] ?? s.defaultValue) === 'false'
+              ? (values[s.key] ?? s.defaultValue) === 'true'
+              : (values[s.key] ?? s.defaultValue)),
         description: s.description,
       }));
       await api.put('/settings', { settings });
@@ -80,15 +99,29 @@ export default function Settings() {
               {DEFAULT_SETTINGS.map((s) => (
                 <div className="form-group" key={s.key}>
                   <label className="form-label">{s.label}</label>
-                  <input
-                    id={`setting-${s.key}`}
-                    className="form-input"
-                    type={s.type}
-                    min="1"
-                    value={values[s.key] ?? s.defaultValue}
-                    onChange={(e) => setValues((v) => ({ ...v, [s.key]: e.target.value }))}
-                    required
-                  />
+                  {s.type === 'select' ? (
+                    <select
+                      id={`setting-${s.key}`}
+                      className="form-input"
+                      value={String(values[s.key] ?? s.defaultValue)}
+                      onChange={(e) => setValues((v) => ({ ...v, [s.key]: e.target.value }))}
+                      required
+                    >
+                      {s.options.map((opt) => (
+                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      id={`setting-${s.key}`}
+                      className="form-input"
+                      type={s.type}
+                      min="1"
+                      value={values[s.key] ?? s.defaultValue}
+                      onChange={(e) => setValues((v) => ({ ...v, [s.key]: e.target.value }))}
+                      required
+                    />
+                  )}
                   <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: 6 }}>{s.description}</p>
                 </div>
               ))}

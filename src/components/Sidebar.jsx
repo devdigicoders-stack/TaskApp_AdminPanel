@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { to: '/gifts', icon: <FiGift />, label: 'Gifts', id: 'nav-gifts' },
   { to: '/redemptions', icon: <FiGift />, label: 'Redemptions', id: 'nav-redemptions' },
   { to: '/users', icon: <FiUsers />, label: 'Users', id: 'nav-users' },
+  { to: '/transactions', icon: <FiDollarSign />, label: 'Transactions', id: 'nav-transactions' },
   { to: '/merchants', icon: <FiShoppingBag />, label: 'Merchants',   id: 'nav-merchants'   },
   { to: '/banners',   icon: <FiImage />,       label: 'Banners',     id: 'nav-banners'     },
   { to: '/settings',  icon: <FiSettings />,    label: 'Settings',    id: 'nav-settings'    },

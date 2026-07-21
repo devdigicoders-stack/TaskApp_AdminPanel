@@ -3,7 +3,7 @@ import api from '../services/api';
 import toast from 'react-hot-toast';
 import { FiUsers, FiEdit2, FiTrash2, FiUserPlus, FiUser, FiSearch, FiBell, FiShoppingBag } from 'react-icons/fi';
 
-const ROLES = ['admin', 'manager', 'merchant'];
+const ROLES = ['admin', 'merchant'];
 
 function Badge({ value }) {
   return <span className={`badge badge-${value}`}>{value}</span>;
