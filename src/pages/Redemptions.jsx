@@ -66,6 +66,7 @@ export default function Redemptions() {
               <tr>
                 <th>User</th>
                 <th>Gift Requested</th>
+                <th>Assigned Merchant</th>
                 <th>Coins Spent</th>
                 <th>Requested At</th>
                 <th>Status</th>
@@ -84,6 +85,14 @@ export default function Redemptions() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       {r.gift?.image && <img src={r.gift.image} alt="gift" style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4 }} />}
                       <span style={{ color: 'var(--text-primary)' }}>{r.gift?.name || 'Unknown Gift'}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
+                      {r.merchant?.shopName || r.gift?.merchant?.shopName || 'N/A'}
+                    </div>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                      {r.merchant?.name || r.gift?.merchant?.name || 'Unassigned'}
                     </div>
                   </td>
                   <td style={{ fontWeight: 600, color: 'var(--accent-primary)' }}>{r.gift?.requiredCoins || 0}</td>

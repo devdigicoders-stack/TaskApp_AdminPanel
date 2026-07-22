@@ -5,6 +5,7 @@ import { FiGift, FiPlus, FiEdit2, FiTrash2 } from 'react-icons/fi';
 
 export default function Gifts() {
   const [gifts, setGifts] = useState([]);
+  const [merchants, setMerchants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -14,12 +15,14 @@ export default function Gifts() {
     description: '',
     requiredCoins: '',
     image: '',
+    merchant: '',
     isActive: true,
     maxRedemptionsPerUser: 0,
   });
 
   useEffect(() => {
     fetchGifts();
+    fetchMerchants();
   }, []);
 
   const fetchGifts = async () => {
@@ -34,8 +37,21 @@ export default function Gifts() {
     }
   };
 
+  const fetchMerchants = async () => {
+    try {
+      const { data } = await api.get('/merchants');
+      setMerchants(data.merchants || []);
+    } catch {
+      toast.error('Failed to load merchants');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!form.merchant) {
+      toast.error('Please assign a merchant to this gift');
+      return;
+    }
     try {
       if (editingId) {
         await api.put(`/gifts/${editingId}`, form);
@@ -72,6 +88,7 @@ export default function Gifts() {
       description: g.description,
       requiredCoins: g.requiredCoins,
       image: g.image,
+      merchant: g.merchant?._id || g.merchant || '',
       isActive: g.isActive,
       maxRedemptionsPerUser: g.maxRedemptionsPerUser ?? 0,
     });
@@ -101,7 +118,7 @@ export default function Gifts() {
         </div>
         <button className="btn btn-primary" onClick={() => {
           setEditingId(null);
-          setForm({ name: '', description: '', requiredCoins: '', image: '', isActive: true, maxRedemptionsPerUser: 0 });
+          setForm({ name: '', description: '', requiredCoins: '', image: '', merchant: merchants[0]?._id || '', isActive: true, maxRedemptionsPerUser: 0 });
           setModal(true);
         }}>
           <FiPlus /> New Gift
@@ -137,7 +154,10 @@ export default function Gifts() {
                     <span style={{ fontWeight: 'bold', color: 'var(--accent-primary)' }}>{g.requiredCoins} Coins</span>
                     <span className={`badge badge-${g.isActive ? 'active' : 'pending'}`}>{g.isActive ? 'Active' : 'Inactive'}</span>
                   </div>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 4 }}>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--accent-blue, #3b82f6)', marginTop: 6, fontWeight: 500 }}>
+                    🏪 Merchant: {g.merchant?.shopName ? `${g.merchant.shopName} (${g.merchant.name})` : (g.merchant?.name || 'Unassigned')}
+                  </div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 2 }}>
                     🔁 Max per user: {g.maxRedemptionsPerUser > 0 ? g.maxRedemptionsPerUser : 'Unlimited'}
                   </div>
                   <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
@@ -161,15 +181,31 @@ export default function Gifts() {
             <form onSubmit={handleSubmit}>
               <div className="modal-body">
                 <div className="form-group">
-                  <label className="form-label">Name</label>
+                  <label className="form-label">Name *</label>
                   <input className="form-input" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="e.g. Amazon ₹100 Voucher" />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Assign Merchant *</label>
+                  <select
+                    className="form-input"
+                    required
+                    value={form.merchant}
+                    onChange={(e) => setForm({ ...form, merchant: e.target.value })}
+                  >
+                    <option value="">-- Select Merchant --</option>
+                    {merchants.map((m) => (
+                      <option key={m._id} value={m._id}>
+                        {m.shopName ? `${m.shopName} (${m.name})` : m.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="form-group">
                   <label className="form-label">Description</label>
                   <textarea className="form-input" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Optional description..." rows={2} />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Required Coins</label>
+                  <label className="form-label">Required Coins *</label>
                   <input type="number" min="1" className="form-input" required value={form.requiredCoins} onChange={(e) => setForm({ ...form, requiredCoins: e.target.value })} />
                 </div>
                 <div className="form-group">
