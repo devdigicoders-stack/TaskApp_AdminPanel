@@ -13,8 +13,8 @@ function MerchantModal({ merchant, onClose, onSave }) {
   const isEdit = !!merchant?._id;
   const [form, setForm] = useState(
     isEdit
-      ? { name: merchant.name, email: merchant.email, shopName: merchant.shopName || '', role: merchant.role, isActive: merchant.isActive }
-      : { name: '', email: '', password: '', shopName: '', role: 'merchant' }
+      ? { name: merchant.name, email: merchant.email, shopName: merchant.shopName || '', address: merchant.address || '', addressLink: merchant.addressLink || '', role: merchant.role, isActive: merchant.isActive }
+      : { name: '', email: '', password: '', shopName: '', address: '', addressLink: '', role: 'merchant' }
   );
   const [saving, setSaving] = useState(false);
 
@@ -62,6 +62,14 @@ function MerchantModal({ merchant, onClose, onSave }) {
             <div className="form-group">
               <label className="form-label">Shop Name</label>
               <input id="merchant-shop" className="form-input" value={form.shopName} onChange={(e) => setForm({ ...form, shopName: e.target.value })} placeholder="Awesome Store" />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Shop Address</label>
+              <input id="merchant-address" className="form-input" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="123 Main Street, Sector 15, City" />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Google Maps Link / URL</label>
+              <input id="merchant-address-link" type="url" className="form-input" value={form.addressLink} onChange={(e) => setForm({ ...form, addressLink: e.target.value })} placeholder="https://maps.google.com/?q=..." />
             </div>
             {!isEdit && (
               <div className="form-group">
